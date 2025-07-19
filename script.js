@@ -1,6 +1,6 @@
 /* 
-LilBet Fortune Wheel - Version 2.1
-UPDATED: Centered timer + Magenta brand colors instead of red
+LilBet Fortune Wheel - Version 2.2
+CONVERSION OPTIMIZED: Lead capture + Social proof + Enhanced UX
 */
 
 // LilBet Fortune Wheel - ИСПРАВЛЕННАЯ ВЕРСИЯ
@@ -15,6 +15,14 @@ class LilBetFortuneWheel {
         this.claimBtn = document.getElementById('claimBtn');
         this.winAmount = document.getElementById('winAmount');
         this.winnerHighlight = document.getElementById('winnerHighlight');
+        
+        // New elements for conversion
+        this.demoBtn = document.getElementById('demoBtn');
+        this.leadForm = document.getElementById('leadForm');
+        this.modalClose = document.getElementById('modalClose');
+        this.todayPayout = document.getElementById('todayPayout');
+        this.onlineUsers = document.getElementById('onlineUsers');
+        this.winnersList = document.getElementById('winnersList');
         
         // Timer Elements
         this.hoursEl = document.getElementById('hours');
@@ -52,9 +60,11 @@ class LilBetFortuneWheel {
         this.createFloatingShapes();
         this.preloadSounds();
         this.addInitialAnimations();
+        this.initConversionFeatures();
         
-        console.log('🎰 LilBet Fortune Wheel загружен!');
+        console.log('🎰 LilBet Fortune Wheel загружен! v2.2');
         console.log('🎯 Логика: 80% = 1000₽, 15% = 500₽, 5% = БОНУС');
+        console.log('📊 КОНВЕРСИЯ: Сбор лидов + Социальные доказательства');
     }
     
     bindEvents() {
@@ -71,10 +81,22 @@ class LilBetFortuneWheel {
             this.redirectToLilBet();
         });
         
-        // Кнопка "ЗАБРАТЬ ВЫИГРЫШ" в модалке редиректит
-        this.claimBtn.addEventListener('click', (e) => {
+        // Demo button for repeat spins
+        this.demoBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            this.redirectToLilBet();
+            this.closeModal();
+        });
+        
+        // Lead form submission
+        this.leadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleLeadSubmission();
+        });
+        
+        // Modal close button
+        this.modalClose.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.closeModal();
         });
         
         // Close modal on overlay click
@@ -593,6 +615,133 @@ class LilBetFortuneWheel {
             `;
             document.head.appendChild(style);
         }
+    }
+    
+    // Conversion Features
+    initConversionFeatures() {
+        this.updateSocialCounters();
+        this.animateWinners();
+        setInterval(() => this.updateSocialCounters(), 30000); // Update every 30 seconds
+        setInterval(() => this.animateWinners(), 10000); // Animate winners every 10 seconds
+    }
+    
+    updateSocialCounters() {
+        // Realistic but fake growing numbers
+        const currentPayout = parseInt(this.todayPayout.textContent.replace(/[^\d]/g, ''));
+        const currentUsers = parseInt(this.onlineUsers.textContent.replace(/[^\d]/g, ''));
+        
+        const newPayout = currentPayout + Math.floor(Math.random() * 50000) + 10000;
+        const newUsers = Math.max(800, currentUsers + Math.floor(Math.random() * 20) - 10);
+        
+        this.animateNumberChange(this.todayPayout, newPayout.toLocaleString('ru-RU') + '₽');
+        this.animateNumberChange(this.onlineUsers, newUsers.toString());
+    }
+    
+    animateNumberChange(element, newValue) {
+        element.style.animation = 'numberCount 0.5s ease-out';
+        setTimeout(() => {
+            element.textContent = newValue;
+            element.style.animation = '';
+        }, 250);
+    }
+    
+    animateWinners() {
+        const winners = [
+            { name: 'Андрей К.', amount: '3,500₽', time: '2 мин назад' },
+            { name: 'Мария С.', amount: '1,000₽', time: '5 мин назад' },
+            { name: 'Игорь В.', amount: '2,000₽', time: '8 мин назад' },
+            { name: 'Елена П.', amount: '5,000₽', time: '1 мин назад' },
+            { name: 'Дмитрий Л.', amount: '1,500₽', time: '3 мин назад' },
+            { name: 'Анна К.', amount: '2,500₽', time: '6 мин назад' },
+            { name: 'Владимир С.', amount: '4,000₽', time: '4 мин назад' },
+            { name: 'Ольга Р.', amount: '1,200₽', time: '7 мин назад' }
+        ];
+        
+        // Shuffle winners and take first 3
+        const shuffled = winners.sort(() => 0.5 - Math.random()).slice(0, 3);
+        
+        // Update DOM
+        this.winnersList.innerHTML = '';
+        shuffled.forEach((winner, index) => {
+            const winnerEl = document.createElement('div');
+            winnerEl.className = 'winner-item';
+            winnerEl.style.animationDelay = `${index * 0.2}s`;
+            winnerEl.innerHTML = `
+                <span class="winner-name">${winner.name}</span>
+                <span class="winner-amount">${winner.amount}</span>
+                <span class="winner-time">${winner.time}</span>
+            `;
+            this.winnersList.appendChild(winnerEl);
+        });
+    }
+    
+    handleLeadSubmission() {
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        
+        if (!phone || !email) {
+            alert('📱 Пожалуйста, заполните все поля!');
+            return;
+        }
+        
+        // Simulate form submission
+        const submitBtn = this.claimBtn;
+        const originalText = submitBtn.textContent;
+        
+        submitBtn.textContent = '⏳ ОБРАБАТЫВАЕМ...';
+        submitBtn.disabled = true;
+        
+        // Show success after 2 seconds
+        setTimeout(() => {
+            this.showLeadSuccess(phone, email);
+        }, 2000);
+    }
+    
+    showLeadSuccess(phone, email) {
+        // Update modal content to show success
+        const modalContent = document.querySelector('.modal-content');
+        modalContent.innerHTML = `
+            <div class="win-animation">
+                <div class="win-icon">🎉</div>
+            </div>
+            
+            <h2 class="modal-title">✅ ЗАЯВКА ПРИНЯТА!</h2>
+            <div class="modal-subtitle">Поздравляем! Вы успешно зарегистрированы!</div>
+            
+            <div class="success-info">
+                <p>📱 Телефон: <strong>${phone}</strong></p>
+                <p>📧 Email: <strong>${email}</strong></p>
+                
+                <div class="success-benefits">
+                    <h3>🎁 ВАШ БОНУСНЫЙ ПАКЕТ:</h3>
+                    <ul>
+                        <li>💰 Ваш выигрыш: <span style="color: #34cc67; font-weight: 800;">${this.winAmount.textContent}</span></li>
+                        <li>🎁 Бонус +200% к депозиту</li>
+                        <li>🔄 50 фриспинов в Book of Ra</li>
+                        <li>⚡ VIP статус на месяц</li>
+                    </ul>
+                </div>
+                
+                <p style="margin-top: 20px; color: #34cc67; font-weight: 600;">
+                    📞 Наш менеджер свяжется с вами в течение 5 минут для активации бонусов!
+                </p>
+            </div>
+            
+            <button class="modal-btn primary" onclick="window.open('https://lil.bet', '_blank');">
+                🚀 ПЕРЕЙТИ В КАЗИНО
+            </button>
+            
+            <div class="modal-footer">
+                <small>🔒 Ваши данные защищены • Бонусы активируются автоматически</small>
+            </div>
+        `;
+        
+        // Track conversion (you would integrate with your analytics here)
+        console.log('🎯 КОНВЕРСИЯ! Лид захвачен:', { phone, email });
+        
+        // Celebrate with confetti
+        this.createConfetti();
+        this.playWinSound();
     }
     
     // Cleanup

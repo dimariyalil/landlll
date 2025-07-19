@@ -1,0 +1,310 @@
+/* Additional Conversion Styles for LilBet v2.2 */
+
+/* CTA Improvements */
+.cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.cta-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    padding: 15px 30px;
+    font-size: 1rem;
+}
+
+.cta-btn.pulse {
+    animation: ctaPulse 2s ease-in-out infinite;
+}
+
+.bonus-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.bonus-item {
+    font-size: 14px;
+    color: #34cc67;
+    font-weight: 600;
+    font-family: 'Tektur', monospace;
+}
+
+/* Social Proof Section */
+.social-proof {
+    padding: 60px 0;
+    background: rgba(52, 204, 103, 0.05);
+    border-radius: 20px;
+    margin: 40px 0;
+}
+
+.section-title {
+    font-family: 'Tektur', monospace;
+    font-size: 2rem;
+    font-weight: 900;
+    color: #34cc67;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.testimonials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.testimonial {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(52, 204, 103, 0.2);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.testimonial-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.testimonial-avatar {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, #34cc67, #2fb557);
+    border-radius: 50%;
+}
+
+.testimonial-info {
+    flex: 1;
+}
+
+.testimonial-name {
+    font-family: 'Tektur', monospace;
+    font-weight: 800;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.testimonial-meta {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Tektur', monospace;
+}
+
+.testimonial-rating {
+    font-size: 14px;
+}
+
+.testimonial-text {
+    font-family: 'Tektur', monospace;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+/* Enhanced Modal */
+.modal-subtitle {
+    font-family: 'Tektur', monospace;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 15px;
+}
+
+.modal-explanation {
+    text-align: left;
+    margin: 25px 0;
+    background: rgba(52, 204, 103, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid rgba(52, 204, 103, 0.3);
+}
+
+.modal-explanation p {
+    font-family: 'Tektur', monospace;
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.modal-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+}
+
+.modal-benefits li {
+    font-family: 'Tektur', monospace;
+    color: #34cc67;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Lead Form */
+.lead-form {
+    margin: 25px 0;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid rgba(52, 204, 103, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    font-family: 'Tektur', monospace;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #34cc67;
+    box-shadow: 0 0 15px rgba(52, 204, 103, 0.3);
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-label {
+    position: absolute;
+    top: -8px;
+    left: 15px;
+    background: #082b53;
+    padding: 0 8px;
+    font-family: 'Tektur', monospace;
+    font-size: 12px;
+    color: #34cc67;
+    font-weight: 600;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: #ff00ff;
+}
+
+/* Animations */
+@keyframes promoPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(255, 0, 255, 0.6); }
+}
+
+@keyframes ctaPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+@keyframes winnerSlide {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes urgentBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes numberCount {
+    from { transform: scale(0.8); }
+    to { transform: scale(1); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .trust-container {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 15px;
+    }
+    
+    .trust-item {
+        font-size: 12px;
+    }
+    
+    .recent-winners {
+        margin: 20px 0;
+        padding: 15px;
+    }
+    
+    .testimonials {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .testimonial {
+        padding: 20px;
+    }
+    
+    .cta-buttons {
+        width: 100%;
+    }
+    
+    .cta-btn {
+        width: 100%;
+        max-width: 350px;
+    }
+    
+    .bonus-list {
+        text-align: center;
+    }
+    
+    .modal-explanation {
+        padding: 15px;
+    }
+    
+    .form-input {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+@media (max-width: 480px) {
+    .promo-badge {
+        font-size: 12px;
+        padding: 10px 20px;
+    }
+    
+    .winner-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 5px;
+    }
+    
+    .testimonial-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .testimonial-avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+    }
+}

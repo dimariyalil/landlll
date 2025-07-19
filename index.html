@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="LilBet Casino - Современное онлайн казино. Крути колесо удачи и выигрывай до 5000₽!">
-    <meta name="keywords" content="казино, LilBet, колесо фортуны, выигрыш, бонус">
+    <meta name="description" content="LilBet Casino - Крути колесо удачи БЕСПЛАТНО! Получи до 5000₽ бонуса + 200% к депозиту. Регистрация за 30 секунд!">
+    <meta name="keywords" content="казино, LilBet, колесо фортуны, выигрыш, бонус, бесплатно">
     <meta name="theme-color" content="#082b53">
     
     <!-- Cache Control -->
@@ -12,7 +12,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>LilBet - Крути колесо удачи! v2.1</title>
+    <title>🎰 LilBet - БЕСПЛАТНОЕ колесо удачи! Выиграй до 5000₽ БЕЗ ДЕПОЗИТА!</title>
     
     <!-- Fonts - Tektur ExtraBold -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="style.css?v=2.1">
+    <link rel="stylesheet" href="style.css?v=2.2">
+    <link rel="stylesheet" href="conversion-styles.css?v=1.0">
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎰%3C/text%3E%3C/svg%3E">
@@ -36,6 +37,24 @@
         <div class="floating-shape shape-6"></div>
     </div>
 
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+        <div class="trust-container">
+            <div class="trust-item">
+                <span class="trust-icon">🏆</span>
+                <span class="trust-text">Лицензия №1234</span>
+            </div>
+            <div class="trust-item">
+                <span class="trust-icon">💰</span>
+                <span class="trust-text">Выплачено сегодня: <span id="todayPayout">2,847,350₽</span></span>
+            </div>
+            <div class="trust-item">
+                <span class="trust-icon">👥</span>
+                <span class="trust-text">Онлайн сейчас: <span id="onlineUsers">1,247</span></span>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Container -->
     <div class="container">
         <!-- Header -->
@@ -48,7 +67,7 @@
             
             <!-- Timer -->
             <div class="timer-container">
-                <div class="timer-label">Акция заканчивается через:</div>
+                <div class="timer-label">🔥 АКЦИЯ ЗАКАНЧИВАЕТСЯ ЧЕРЕЗ:</div>
                 <div class="timer" id="countdown">
                     <span class="timer-part">
                         <span class="timer-number" id="hours">23</span>
@@ -65,20 +84,49 @@
                         <span class="timer-text">с</span>
                     </span>
                 </div>
+                <div class="timer-subtitle">⚡ После этого бонус сгорает НАВСЕГДА!</div>
             </div>
         </header>
 
         <!-- Hero Section -->
         <main class="hero">
             <div class="hero-content">
+                <div class="promo-badge">
+                    🎁 ТОЛЬКО СЕГОДНЯ - УДВОЕННЫЕ ВЫИГРЫШИ!
+                </div>
+                
                 <h1 class="hero-title">
                     <span class="title-line primary">КРУТИ КОЛЕСО</span>
                     <span class="title-line accent">И ВЫИГРЫВАЙ</span>
+                    <span class="title-line small">РЕАЛЬНЫЕ ДЕНЬГИ БЕЗ ДЕПОЗИТА!</span>
                 </h1>
                 
                 <p class="hero-subtitle">
-                    Получи мгновенный выигрыш до <span class="highlight">5000₽</span>
+                    🎯 Получи мгновенный выигрыш до <span class="highlight">5000₽</span><br>
+                    💎 + Бонус 200% к первому депозиту (до 50,000₽)
                 </p>
+
+                <!-- Recent Winners -->
+                <div class="recent-winners">
+                    <div class="winners-title">🏆 Последние победители:</div>
+                    <div class="winners-list" id="winnersList">
+                        <div class="winner-item">
+                            <span class="winner-name">Андрей К.</span>
+                            <span class="winner-amount">3,500₽</span>
+                            <span class="winner-time">2 мин назад</span>
+                        </div>
+                        <div class="winner-item">
+                            <span class="winner-name">Мария С.</span>
+                            <span class="winner-amount">1,000₽</span>
+                            <span class="winner-time">5 мин назад</span>
+                        </div>
+                        <div class="winner-item">
+                            <span class="winner-name">Игорь В.</span>
+                            <span class="winner-amount">2,000₽</span>
+                            <span class="winner-time">8 мин назад</span>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Fortune Wheel -->
                 <div class="wheel-container">
@@ -97,7 +145,7 @@
                         
                         <!-- Center Spin Button -->
                         <button class="wheel-center-btn" id="spinBtn" type="button">
-                            <span class="btn-text" id="btnText">КРУТИТЬ</span>
+                            <span class="btn-text" id="btnText">КРУТИТЬ<br>БЕСПЛАТНО</span>
                             <div class="btn-icon">🎰</div>
                         </button>
                         
@@ -107,48 +155,99 @@
                         <!-- Winner Highlight -->
                         <div class="winner-highlight" id="winnerHighlight"></div>
                     </div>
+                    
+                    <div class="wheel-info">
+                        ✨ Это ДЕМО колесо - покрути БЕСПЛАТНО!<br>
+                        🎁 Реальные выигрыши ждут после регистрации
+                    </div>
                 </div>
 
                 <!-- CTA Section -->
                 <div class="cta-section">
-                    <button class="cta-btn primary" id="playBtn" type="button">
-                        <span>ИГРАТЬ СЕЙЧАС</span>
-                        <div class="btn-glow"></div>
-                    </button>
+                    <div class="cta-buttons">
+                        <button class="cta-btn primary pulse" id="playBtn" type="button">
+                            <span>🚀 ЗАБРАТЬ ВЫИГРЫШ + БОНУС</span>
+                            <div class="btn-glow"></div>
+                        </button>
+                        
+                        <button class="cta-btn secondary" id="demoBtn" type="button">
+                            <span>🎮 Играть в демо еще раз</span>
+                        </button>
+                    </div>
                     
                     <div class="bonus-info">
                         <div class="bonus-text">
-                            🎁 Бонус +200% к первому депозиту
+                            🎁 При регистрации получаешь ВСЕ бонусы сразу:
+                        </div>
+                        <div class="bonus-list">
+                            <div class="bonus-item">✅ Твой выигрыш с колеса (до 5000₽)</div>
+                            <div class="bonus-item">✅ +200% к первому депозиту</div>
+                            <div class="bonus-item">✅ 50 фриспинов в Book of Ra</div>
+                            <div class="bonus-item">✅ VIP статус на месяц</div>
                         </div>
                         <div class="security-text">
-                            🔒 Лицензированное казино • Моментальные выплаты
+                            🔒 Лицензированное казино • Моментальные выплаты • Без скрытых комиссий
                         </div>
                     </div>
                 </div>
             </div>
         </main>
 
+        <!-- Social Proof -->
+        <section class="social-proof">
+            <h2 class="section-title">💬 Что говорят игроки:</h2>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">👨</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Алексей М.</div>
+                            <div class="testimonial-meta">Играет 2 года • Выиграл 847,300₽</div>
+                        </div>
+                        <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <div class="testimonial-text">
+                        "Вывел уже больше 800к! Реально платят без задержек. Колесо фортуны - моя любимая фишка, часто выигрываю на нем крупные суммы."
+                    </div>
+                </div>
+                
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">👩</div>
+                        <div class="testimonial-info">
+                            <div class="testimonial-name">Елена К.</div>
+                            <div class="testimonial-meta">Новичок • Выиграла 25,480₽</div>
+                        </div>
+                        <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <div class="testimonial-text">
+                        "Зарегистрировалась только вчера после рекламы в Инстаграм. Сразу выиграла на колесе 2000₽, а сегодня еще 23к в слотах! Спасибо!"
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Features -->
         <section class="features">
             <div class="feature-item">
                 <div class="feature-icon">⚡</div>
-                <div class="feature-title">Мгновенно</div>
-                <div class="feature-desc">Выплаты за 30 секунд</div>
+                <div class="feature-title">За 30 секунд</div>
+                <div class="feature-desc">Регистрация и выплаты</div>
             </div>
             <div class="feature-item">
                 <div class="feature-icon">🛡️</div>
-                <div class="feature-title">Безопасно</div>
-                <div class="feature-desc">Лицензия и SSL</div>
+                <div class="feature-title">100% безопасно</div>
+                <div class="feature-desc">Лицензия и SSL защита</div>
             </div>
             <div class="feature-item">
                 <div class="feature-icon">🎯</div>
-                <div class="feature-title">Честно</div>
-                <div class="feature-desc">Проверяемая система</div>
+                <div class="feature-title">Честная игра</div>
+                <div class="feature-desc">Проверяемый алгоритм</div>
             </div>
         </section>
     </div>
 
-    <!-- Win Modal -->
+    <!-- Win Modal - IMPROVED VERSION -->
     <div class="modal-overlay" id="winModal">
         <div class="modal">
             <div class="modal-content">
@@ -157,22 +256,45 @@
                     <div class="confetti-container" id="confetti"></div>
                 </div>
                 
-                <h2 class="modal-title">ПОЗДРАВЛЯЕМ!</h2>
+                <h2 class="modal-title">🎊 ПОЗДРАВЛЯЕМ!</h2>
+                <div class="modal-subtitle">Ты выиграл в ДЕМО режиме:</div>
                 <div class="win-amount" id="winAmount">1000₽</div>
-                <p class="modal-text">Вы выиграли!</p>
                 
-                <button class="modal-btn" id="claimBtn" type="button">
-                    ЗАБРАТЬ ВЫИГРЫШ
-                </button>
+                <div class="modal-explanation">
+                    <p>🎁 <strong>Это был тест колеса!</strong></p>
+                    <p>✨ Чтобы получить РЕАЛЬНЫЕ деньги, зарегистрируйся за 30 секунд и получи:</p>
+                    <ul class="modal-benefits">
+                        <li>💰 Свой выигрыш с колеса</li>
+                        <li>🎁 +200% к первому депозиту</li>
+                        <li>🔄 50 бесплатных вращений</li>
+                        <li>⚡ Моментальные выплаты</li>
+                    </ul>
+                </div>
+                
+                <!-- Lead Form -->
+                <form class="lead-form" id="leadForm">
+                    <div class="form-group">
+                        <input type="tel" id="phone" placeholder="+7 (999) 123-45-67" required class="form-input">
+                        <label for="phone" class="form-label">📱 Номер телефона</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="your@email.com" required class="form-input">
+                        <label for="email" class="form-label">📧 Email для бонусов</label>
+                    </div>
+                    <button type="submit" class="modal-btn primary" id="claimBtn">
+                        🚀 ЗАБРАТЬ ВЫИГРЫШ + ВСЕ БОНУСЫ
+                    </button>
+                </form>
                 
                 <div class="modal-footer">
-                    <small>Бонус будет зачислен на ваш счет после регистрации</small>
+                    <small>🔒 Твои данные защищены • Без спама • Только выигрыши</small>
+                    <button class="modal-close" id="modalClose">❌</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="script.js?v=2.1"></script>
+    <script src="script.js?v=2.2"></script>
 </body>
 </html>

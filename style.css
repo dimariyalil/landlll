@@ -1,6 +1,6 @@
 /* 
-LilBet Casino Landing - Version 2.1 
-Updated: Centered timer + Brand colors (no red) 
+LilBet Casino Landing - Version 2.2 
+CONVERSION OPTIMIZED: Lead forms + Social proof + UX improvements
 */
 
 /* Reset & Base */
@@ -133,6 +133,49 @@ body {
     left: 3%;
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
     animation-delay: 7s;
+}
+
+/* Trust Bar */
+.trust-bar {
+    background: linear-gradient(90deg, #34cc67 0%, #2fb557 100%);
+    padding: 8px 0;
+    position: relative;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.trust-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #082b53;
+    font-family: 'Tektur', monospace;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.trust-icon {
+    font-size: 16px;
+}
+
+.trust-text {
+    white-space: nowrap;
+}
+
+#todayPayout, #onlineUsers {
+    color: #082b53;
+    font-weight: 900;
+    animation: numberCount 2s ease-out;
 }
 
 /* Container */
@@ -294,6 +337,16 @@ body {
     animation: separatorFlash 0.8s ease-in-out infinite;
 }
 
+.timer-subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #ff00ff;
+    font-weight: 700;
+    font-family: 'Tektur', monospace;
+    text-align: center;
+    animation: urgentBlink 1.5s ease-in-out infinite;
+}
+
 /* Hero Section */
 .hero {
     text-align: center;
@@ -343,6 +396,93 @@ body {
     color: #34cc67;
     font-weight: 800;
     text-shadow: 0 0 10px rgba(52, 204, 103, 0.5);
+}
+
+/* Promo Badge */
+.promo-badge {
+    display: inline-block;
+    background: linear-gradient(45deg, #ff00ff, #cc00cc);
+    color: #ffffff;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-family: 'Tektur', monospace;
+    font-weight: 800;
+    font-size: 14px;
+    margin-bottom: 20px;
+    animation: promoPulse 2s ease-in-out infinite;
+    text-transform: uppercase;
+    box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
+}
+
+.title-line.small {
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    color: #ff00ff;
+    text-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+}
+
+/* Recent Winners */
+.recent-winners {
+    background: rgba(52, 204, 103, 0.1);
+    border: 2px solid rgba(52, 204, 103, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 30px 0;
+    backdrop-filter: blur(10px);
+}
+
+.winners-title {
+    font-family: 'Tektur', monospace;
+    font-weight: 800;
+    color: #34cc67;
+    margin-bottom: 15px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.winners-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.winner-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-family: 'Tektur', monospace;
+    font-size: 14px;
+    animation: winnerSlide 0.5s ease-out;
+}
+
+.winner-name {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.winner-amount {
+    color: #34cc67;
+    font-weight: 800;
+}
+
+.winner-time {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+/* Wheel Info */
+.wheel-info {
+    margin-top: 20px;
+    text-align: center;
+    font-family: 'Tektur', monospace;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(52, 204, 103, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(52, 204, 103, 0.3);
 }
 
 /* Wheel Container */
