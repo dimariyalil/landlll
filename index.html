@@ -3,104 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="LilBet Casino - Испытайте удачу в Gate of Olympus. Лучшие слоты и азартные игры онлайн.">
-    <meta name="keywords" content="казино, слоты, LilBet, Gate of Olympus, азартные игры">
-    <title>LilBet - Gate of Olympus</title>
+    <meta name="description" content="LilBet Casino - Современное онлайн казино. Крути колесо удачи и выигрывай до 5000₽!">
+    <meta name="keywords" content="казино, LilBet, колесо фортуны, выигрыш, бонус">
+    <meta name="theme-color" content="#082b53">
+    <title>LilBet - Крути колесо удачи!</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎰%3C/text%3E%3C/svg%3E">
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+        <div class="floating-shape shape-5"></div>
+        <div class="floating-shape shape-6"></div>
+    </div>
+
+    <!-- Main Container -->
     <div class="container">
         <!-- Header -->
         <header class="header">
             <div class="logo-container">
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTIwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8dGV4dCB4PSI2MCIgeT0iMjUiIGZvbnQtZmFtaWx5PSJDaW56ZWwiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNGRkQ3MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxpbEJldDwvdGV4dD4KPC9zdmc+" alt="LilBet Casino" class="logo">
+                <svg class="logo" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                    <text x="100" y="45" font-family="Tektur" font-weight="900" font-size="32" fill="#34cc67" text-anchor="middle">lilbet</text>
+                </svg>
+            </div>
+            
+            <!-- Timer -->
+            <div class="timer-container">
+                <div class="timer-label">Акция заканчивается через:</div>
+                <div class="timer" id="countdown">
+                    <span class="timer-part">
+                        <span class="timer-number" id="hours">23</span>
+                        <span class="timer-text">ч</span>
+                    </span>
+                    <span class="timer-separator">:</span>
+                    <span class="timer-part">
+                        <span class="timer-number" id="minutes">45</span>
+                        <span class="timer-text">м</span>
+                    </span>
+                    <span class="timer-separator">:</span>
+                    <span class="timer-part">
+                        <span class="timer-number" id="seconds">12</span>
+                        <span class="timer-text">с</span>
+                    </span>
+                </div>
             </div>
         </header>
 
         <!-- Hero Section -->
-        <main class="hero-section">
-            <div class="hero-background">
-                <div class="temple-pillars"></div>
-                <div class="clouds"></div>
-                <div class="lightning"></div>
-            </div>
-            
+        <main class="hero">
             <div class="hero-content">
-                <h1 class="main-title">
-                    <span class="title-line">ИСПЫТАЙТЕ</span>
-                    <span class="title-line gold">УДАЧУ</span>
+                <h1 class="hero-title">
+                    <span class="title-line primary">КРУТИ КОЛЕСО</span>
+                    <span class="title-line accent">И ВЫИГРЫВАЙ</span>
                 </h1>
                 
-                <div class="subtitle">
-                    В ВЕЛИЧЕСТВЕННЫХ ВРАТАХ ОЛИМПА
-                </div>
+                <p class="hero-subtitle">
+                    Получи мгновенный выигрыш до <span class="highlight">5000₽</span>
+                </p>
 
-                <!-- Fortune Wheel Container -->
-                <div class="fortune-wheel-container">
-                    <div class="wheel-background">
-                        <div class="wheel-glow"></div>
-                        <div class="fortune-wheel" id="fortuneWheel">
-                            <div class="wheel-center">
-                                <div class="center-button" id="spinButton">
-                                    <span>ВРАЩАТЬ</span>
-                                </div>
-                            </div>
-                            <div class="wheel-sectors">
-                                <div class="sector" data-prize="100">100₽</div>
-                                <div class="sector" data-prize="500">500₽</div>
-                                <div class="sector" data-prize="1000">1000₽</div>
-                                <div class="sector" data-prize="50">50₽</div>
-                                <div class="sector" data-prize="2000">2000₽</div>
-                                <div class="sector" data-prize="250">250₽</div>
-                                <div class="sector" data-prize="5000">5000₽</div>
-                                <div class="sector" data-prize="75">75₽</div>
-                            </div>
+                <!-- Fortune Wheel -->
+                <div class="wheel-container">
+                    <div class="wheel-wrapper">
+                        <!-- Wheel Segments -->
+                        <div class="wheel" id="wheel">
+                            <div class="wheel-segment segment-1" data-prize="50">50₽</div>
+                            <div class="wheel-segment segment-2" data-prize="100">100₽</div>
+                            <div class="wheel-segment segment-3" data-prize="500">500₽</div>
+                            <div class="wheel-segment segment-4" data-prize="1000">1000₽</div>
+                            <div class="wheel-segment segment-5" data-prize="2000">2000₽</div>
+                            <div class="wheel-segment segment-6" data-prize="5000">5000₽</div>
+                            <div class="wheel-segment segment-7" data-prize="0">НЕУДАЧА</div>
+                            <div class="wheel-segment segment-8" data-prize="bonus">БОНУС</div>
                         </div>
+                        
+                        <!-- Center Button -->
+                        <button class="wheel-center-btn" id="spinBtn">
+                            <span class="btn-text">КРУТИТЬ</span>
+                            <div class="btn-icon">🎰</div>
+                        </button>
+                        
+                        <!-- Pointer -->
                         <div class="wheel-pointer"></div>
                     </div>
                 </div>
 
+                <!-- CTA Section -->
                 <div class="cta-section">
-                    <button class="cta-button primary" id="playButton">
+                    <button class="cta-btn primary" id="playBtn">
                         <span>ИГРАТЬ СЕЙЧАС</span>
-                        <div class="button-glow"></div>
+                        <div class="btn-glow"></div>
                     </button>
-                    <div class="bonus-text">
-                        Получите бонус <span class="highlight">+200%</span> к депозиту
+                    
+                    <div class="bonus-info">
+                        <div class="bonus-text">
+                            🎁 Бонус +200% к первому депозиту
+                        </div>
+                        <div class="security-text">
+                            🔒 Лицензированное казино • Моментальные выплаты
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Decorative Elements -->
-            <div class="decorative-elements">
-                <div class="coin coin-1"></div>
-                <div class="coin coin-2"></div>
-                <div class="coin coin-3"></div>
-                <div class="sparkle sparkle-1"></div>
-                <div class="sparkle sparkle-2"></div>
-                <div class="sparkle sparkle-3"></div>
-            </div>
         </main>
 
-        <!-- Features Section -->
+        <!-- Features -->
         <section class="features">
             <div class="feature-item">
                 <div class="feature-icon">⚡</div>
-                <div class="feature-text">Мгновенные выплаты</div>
+                <div class="feature-title">Мгновенно</div>
+                <div class="feature-desc">Выплаты за 30 секунд</div>
             </div>
             <div class="feature-item">
-                <div class="feature-icon">🏛️</div>
-                <div class="feature-text">Лицензированное казино</div>
+                <div class="feature-icon">🛡️</div>
+                <div class="feature-title">Безопасно</div>
+                <div class="feature-desc">Лицензия и SSL</div>
             </div>
             <div class="feature-item">
-                <div class="feature-icon">🎰</div>
-                <div class="feature-text">1000+ игр</div>
+                <div class="feature-icon">🎯</div>
+                <div class="feature-title">Честно</div>
+                <div class="feature-desc">Проверяемая система</div>
             </div>
         </section>
     </div>
 
+    <!-- Win Modal -->
+    <div class="modal-overlay" id="winModal">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="win-animation">
+                    <div class="win-icon">🎉</div>
+                    <div class="confetti-container" id="confetti"></div>
+                </div>
+                
+                <h2 class="modal-title">ПОЗДРАВЛЯЕМ!</h2>
+                <div class="win-amount" id="winAmount">1000₽</div>
+                <p class="modal-text">Вы выиграли бонус!</p>
+                
+                <button class="modal-btn" id="claimBtn">
+                    ЗАБРАТЬ ВЫИГРЫШ
+                </button>
+                
+                <div class="modal-footer">
+                    <small>Бонус будет зачислен на ваш счет после регистрации</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
 </html>
