@@ -1,3 +1,8 @@
+/* 
+LilBet Fortune Wheel - Version 2.0
+FIXED: Wheel center button positioning + Casino-style design
+*/
+
 // LilBet Fortune Wheel - ИСПРАВЛЕННАЯ ВЕРСИЯ
 class LilBetFortuneWheel {
     constructor() {
