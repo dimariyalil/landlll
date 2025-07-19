@@ -1,6 +1,6 @@
 /* 
-LilBet Fortune Wheel - Version 2.0
-FIXED: Wheel center button positioning + Casino-style design
+LilBet Fortune Wheel - Version 2.1
+UPDATED: Centered timer + Magenta brand colors instead of red
 */
 
 // LilBet Fortune Wheel - ИСПРАВЛЕННАЯ ВЕРСИЯ
@@ -41,7 +41,7 @@ class LilBetFortuneWheel {
         this.segmentAngle = 360 / this.segments.length;
         
         // Timer Configuration
-        this.timeLeft = { hours: 0, minutes: 0, seconds: 45 }; // Старт с 45 секунд для демо
+        this.timeLeft = { hours: 0, minutes: 1, seconds: 0 }; // Старт с 1 минуты для демо urgent режима
         
         this.init();
     }

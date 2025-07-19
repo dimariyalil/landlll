@@ -1,6 +1,6 @@
 /* 
-LilBet Casino Landing - Version 2.0 
-Updated: Casino-style timer + Fixed wheel button 
+LilBet Casino Landing - Version 2.1 
+Updated: Centered timer + Brand colors (no red) 
 */
 
 /* Reset & Base */
@@ -148,10 +148,10 @@ body {
 .header {
     padding: 20px 0;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 25px;
     transition: all 0.3s ease;
 }
 
@@ -219,17 +219,17 @@ body {
 }
 
 .timer.urgent {
-    border-image: linear-gradient(45deg, #ff4757, #ff6b7a, #ff4757) 1;
-    background: linear-gradient(145deg, #2d1517 0%, #3d1f23 50%, #2d1517 100%);
+    border-image: linear-gradient(45deg, #ff00ff, #cc00cc, #ff00ff) 1;
+    background: linear-gradient(145deg, #2d1530 0%, #3d1f40 50%, #2d1530 100%);
     box-shadow: 
-        0 0 40px rgba(255, 71, 87, 0.5),
-        inset 0 0 20px rgba(255, 71, 87, 0.1),
+        0 0 40px rgba(255, 0, 255, 0.5),
+        inset 0 0 20px rgba(255, 0, 255, 0.1),
         0 5px 15px rgba(0, 0, 0, 0.4);
     animation: urgentPulse 1.5s ease-in-out infinite;
 }
 
 .timer.urgent::before {
-    background: linear-gradient(90deg, transparent, rgba(255, 71, 87, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.3), transparent);
 }
 
 .timer-part {
@@ -245,8 +245,8 @@ body {
 }
 
 .timer.urgent .timer-part {
-    border-color: rgba(255, 71, 87, 0.3);
-    background: rgba(255, 71, 87, 0.05);
+    border-color: rgba(255, 0, 255, 0.3);
+    background: rgba(255, 0, 255, 0.05);
 }
 
 .timer-number {
@@ -260,8 +260,8 @@ body {
 }
 
 .timer.urgent .timer-number {
-    color: #ff4757;
-    text-shadow: 0 0 15px rgba(255, 71, 87, 0.6);
+    color: #ff00ff;
+    text-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
     animation: numberFlicker 0.5s ease-in-out infinite alternate;
 }
 
@@ -276,7 +276,7 @@ body {
 }
 
 .timer.urgent .timer-text {
-    color: #ff4757;
+    color: #ff00ff;
 }
 
 .timer-separator {
@@ -289,8 +289,8 @@ body {
 }
 
 .timer.urgent .timer-separator {
-    color: #ff4757;
-    text-shadow: 0 0 10px rgba(255, 71, 87, 0.7);
+    color: #ff00ff;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
     animation: separatorFlash 0.8s ease-in-out infinite;
 }
 
@@ -802,14 +802,14 @@ body {
 @keyframes urgentPulse {
     0%, 100% {
         box-shadow: 
-            0 0 40px rgba(255, 71, 87, 0.5),
-            inset 0 0 20px rgba(255, 71, 87, 0.1),
+            0 0 40px rgba(255, 0, 255, 0.5),
+            inset 0 0 20px rgba(255, 0, 255, 0.1),
             0 5px 15px rgba(0, 0, 0, 0.4);
     }
     50% {
         box-shadow: 
-            0 0 60px rgba(255, 71, 87, 0.8),
-            inset 0 0 30px rgba(255, 71, 87, 0.2),
+            0 0 60px rgba(255, 0, 255, 0.8),
+            inset 0 0 30px rgba(255, 0, 255, 0.2),
             0 8px 25px rgba(0, 0, 0, 0.5);
     }
 }
@@ -950,10 +950,8 @@ body {
     }
     
     .header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 15px;
+        gap: 20px;
+        padding: 15px 0;
     }
     
     .hero {
