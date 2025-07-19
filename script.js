@@ -1,47 +1,42 @@
-// Modern Fortune Wheel for LilBet
-class LilBetWheel {
+// LilBet Fortune Wheel - ИСПРАВЛЕННАЯ ВЕРСИЯ
+class LilBetFortuneWheel {
     constructor() {
         // DOM Elements
         this.wheel = document.getElementById('wheel');
         this.spinBtn = document.getElementById('spinBtn');
+        this.btnText = document.getElementById('btnText');
         this.playBtn = document.getElementById('playBtn');
         this.winModal = document.getElementById('winModal');
         this.claimBtn = document.getElementById('claimBtn');
         this.winAmount = document.getElementById('winAmount');
-        this.confettiContainer = document.getElementById('confetti');
+        this.winnerHighlight = document.getElementById('winnerHighlight');
         
         // Timer Elements
         this.hoursEl = document.getElementById('hours');
         this.minutesEl = document.getElementById('minutes');
         this.secondsEl = document.getElementById('seconds');
+        this.timerEl = document.getElementById('countdown');
         
         // Game State
         this.isSpinning = false;
         this.currentRotation = 0;
         
-        // Wheel Configuration
+        // Wheel Configuration (исправленные призы)
         this.segments = [
-            { prize: 50, text: '50₽' },
-            { prize: 100, text: '100₽' },
-            { prize: 500, text: '500₽' },
-            { prize: 1000, text: '1000₽' },
-            { prize: 2000, text: '2000₽' },
-            { prize: 5000, text: '5000₽' },
-            { prize: 0, text: 'НЕУДАЧА' },
-            { prize: 'bonus', text: 'БОНУС' }
+            { prize: 500, text: '500₽', weight: 15 },    // segment-1
+            { prize: 100, text: '100₽', weight: 5 },     // segment-2 
+            { prize: 1000, text: '1000₽', weight: 80 },  // segment-3 (основной выигрыш)
+            { prize: 'bonus', text: 'БОНУС', weight: 5 }, // segment-4
+            { prize: 2000, text: '2000₽', weight: 3 },   // segment-5
+            { prize: 500, text: '500₽', weight: 15 },    // segment-6
+            { prize: 1000, text: '1000₽', weight: 80 },  // segment-7 (основной выигрыш) 
+            { prize: 5000, text: '5000₽', weight: 2 }    // segment-8
         ];
         
         this.segmentAngle = 360 / this.segments.length;
         
-        // Always win 1000₽ for demo (segment index 3)
-        this.winningSegment = 3;
-        
-        // Timer Configuration (23:45:12)
-        this.timeLeft = {
-            hours: 23,
-            minutes: 45,
-            seconds: 12
-        };
+        // Timer Configuration
+        this.timeLeft = { hours: 0, minutes: 0, seconds: 45 }; // Старт с 45 секунд для демо
         
         this.init();
     }
@@ -51,17 +46,31 @@ class LilBetWheel {
         this.startTimer();
         this.createFloatingShapes();
         this.preloadSounds();
+        this.addInitialAnimations();
         
-        // Add initial animations
-        setTimeout(() => {
-            this.addInitialAnimations();
-        }, 500);
+        console.log('🎰 LilBet Fortune Wheel загружен!');
+        console.log('🎯 Логика: 80% = 1000₽, 15% = 500₽, 5% = БОНУС');
     }
     
     bindEvents() {
-        this.spinBtn.addEventListener('click', () => this.spin());
-        this.playBtn.addEventListener('click', () => this.redirectToLilBet());
-        this.claimBtn.addEventListener('click', () => this.redirectToLilBet());
+        // ИСПРАВЛЕНО: Кнопка "КРУТИТЬ" только крутит колесо
+        this.spinBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.spin();
+        });
+        
+        // Кнопка "ИГРАТЬ СЕЙЧАС" редиректит
+        this.playBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.redirectToLilBet();
+        });
+        
+        // Кнопка "ЗАБРАТЬ ВЫИГРЫШ" в модалке редиректит
+        this.claimBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.redirectToLilBet();
+        });
         
         // Close modal on overlay click
         this.winModal.addEventListener('click', (e) => {
@@ -82,7 +91,7 @@ class LilBetWheel {
         });
     }
     
-    // Timer Logic
+    // Timer Logic с красным цветом для срочности
     startTimer() {
         this.updateTimerDisplay();
         
@@ -98,13 +107,14 @@ class LilBetWheel {
                     this.timeLeft.hours--;
                     
                     if (this.timeLeft.hours < 0) {
-                        // Reset timer when it reaches 0
-                        this.timeLeft = { hours: 23, minutes: 45, seconds: 12 };
+                        // Reset timer
+                        this.timeLeft = { hours: 0, minutes: 0, seconds: 45 };
                     }
                 }
             }
             
             this.updateTimerDisplay();
+            this.checkUrgentTime();
         }, 1000);
     }
     
@@ -114,59 +124,164 @@ class LilBetWheel {
         this.secondsEl.textContent = this.timeLeft.seconds.toString().padStart(2, '0');
     }
     
-    // Wheel Spinning Logic
+    checkUrgentTime() {
+        const totalSeconds = this.timeLeft.hours * 3600 + this.timeLeft.minutes * 60 + this.timeLeft.seconds;
+        
+        if (totalSeconds < 60) { // Меньше 1 минуты
+            this.timerEl.classList.add('urgent');
+        } else {
+            this.timerEl.classList.remove('urgent');
+        }
+    }
+    
+    // ГЛАВНАЯ ФУНКЦИЯ ВРАЩЕНИЯ КОЛЕСА
     spin() {
         if (this.isSpinning) return;
         
+        console.log('🎰 Начинаем вращение колеса...');
+        
         this.isSpinning = true;
         this.spinBtn.disabled = true;
-        this.spinBtn.querySelector('.btn-text').textContent = 'КРУТИТСЯ...';
+        this.btnText.textContent = 'КРУТИТСЯ...';
         
-        // Play spin sound
+        // Выбираем выигрышный сегмент на основе весов
+        const winningSegmentIndex = this.selectWinningSegment();
+        const winningSegment = this.segments[winningSegmentIndex];
+        
+        console.log(`🎯 Выбран сегмент ${winningSegmentIndex}: ${winningSegment.text}`);
+        
+        // Играем звук вращения
         this.playSpinSound();
         
-        // Calculate winning rotation
-        const targetSegmentAngle = this.winningSegment * this.segmentAngle;
-        const extraRotations = 4 + Math.random() * 2; // 4-6 full rotations
-        const finalRotation = this.currentRotation + (extraRotations * 360) + (360 - targetSegmentAngle) + (this.segmentAngle / 2);
+        // Добавляем визуальные эффекты
+        this.wheel.classList.add('spinning');
+        this.addSpinEffects();
         
-        // Apply rotation
+        // Рассчитываем финальный угол поворота
+        const targetAngle = this.calculateTargetAngle(winningSegmentIndex);
+        const extraRotations = 4 + Math.random() * 2; // 4-6 полных оборотов
+        const finalRotation = this.currentRotation + (extraRotations * 360) + targetAngle;
+        
+        console.log(`🔄 Поворот на ${finalRotation}°`);
+        
+        // Применяем вращение
         this.wheel.style.transform = `rotate(${finalRotation}deg)`;
         this.currentRotation = finalRotation % 360;
         
-        // Add visual effects during spin
-        this.addSpinEffects();
-        
-        // Show result after animation
+        // Показываем результат через 3.5 секунды
         setTimeout(() => {
-            this.showWinResult();
-            this.isSpinning = false;
-            this.spinBtn.disabled = false;
-            this.spinBtn.querySelector('.btn-text').textContent = 'КРУТИТЬ';
-        }, 4000);
+            this.stopSpin(winningSegmentIndex, winningSegment);
+        }, 3500);
     }
     
-    showWinResult() {
-        const prize = this.segments[this.winningSegment].prize;
+    selectWinningSegment() {
+        // Продвинутая логика выбора на основе весов
+        const totalWeight = this.segments.reduce((sum, segment) => sum + segment.weight, 0);
+        let random = Math.random() * totalWeight;
         
-        // Update win amount in modal
-        if (prize === 'bonus') {
-            this.winAmount.textContent = 'БОНУС';
-        } else {
-            this.winAmount.textContent = `${prize}₽`;
+        for (let i = 0; i < this.segments.length; i++) {
+            random -= this.segments[i].weight;
+            if (random <= 0) {
+                return i;
+            }
         }
         
-        // Show modal with animation
+        return 2; // Fallback to 1000₽ segment
+    }
+    
+    calculateTargetAngle(segmentIndex) {
+        // Рассчитываем угол для точного попадания указателя на сегмент
+        const segmentCenter = segmentIndex * this.segmentAngle + (this.segmentAngle / 2);
+        // Указатель находится сверху (0°), поэтому нужно развернуть на нужный угол
+        return 360 - segmentCenter;
+    }
+    
+    stopSpin(segmentIndex, segment) {
+        console.log(`✨ Колесо остановилось! Выигрыш: ${segment.text}`);
+        
+        this.isSpinning = false;
+        this.wheel.classList.remove('spinning');
+        this.spinBtn.disabled = false;
+        this.btnText.textContent = 'КРУТИТЬ';
+        
+        // Тряска экрана при остановке
+        this.shakeScreen();
+        
+        // Подсветка выигрышного сектора
+        this.highlightWinnerSegment(segmentIndex);
+        
+        // Показываем результат через небольшую задержку
+        setTimeout(() => {
+            this.showWinResult(segment);
+        }, 500);
+    }
+    
+    showWinResult(segment) {
+        // Обновляем сумму выигрыша в модалке
+        if (segment.prize === 'bonus') {
+            this.winAmount.textContent = 'ФРИСПИНЫ';
+        } else {
+            this.winAmount.textContent = `${segment.prize}₽`;
+        }
+        
+        // Показываем модалку
         this.showModal();
         
-        // Create confetti
+        // Запускаем конфетти
         this.createConfetti();
         
-        // Play win sound
+        // Играем звук выигрыша
         this.playWinSound();
         
-        // Add screen flash effect
+        // Вспышка экрана
         this.addWinFlash();
+    }
+    
+    // Тряска экрана при остановке колеса
+    shakeScreen() {
+        document.body.style.animation = 'screenShake 0.6s ease-out';
+        setTimeout(() => {
+            document.body.style.animation = '';
+        }, 600);
+        
+        if (!document.querySelector('#screen-shake-style')) {
+            const style = document.createElement('style');
+            style.id = 'screen-shake-style';
+            style.textContent = `
+                @keyframes screenShake {
+                    0%, 100% { transform: translateX(0); }
+                    10% { transform: translateX(-3px) translateY(-1px); }
+                    20% { transform: translateX(3px) translateY(1px); }
+                    30% { transform: translateX(-2px) translateY(-1px); }
+                    40% { transform: translateX(2px) translateY(1px); }
+                    50% { transform: translateX(-1px) translateY(-1px); }
+                    60% { transform: translateX(1px) translateY(1px); }
+                    70% { transform: translateX(-1px) translateY(-1px); }
+                    80% { transform: translateX(1px) translateY(1px); }
+                    90% { transform: translateX(0); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+    
+    // Подсветка выигрышного сектора
+    highlightWinnerSegment(segmentIndex) {
+        // Поворачиваем подсветку на нужный сегмент
+        const angle = segmentIndex * this.segmentAngle;
+        this.winnerHighlight.style.background = `conic-gradient(
+            from ${angle}deg,
+            transparent 0deg ${angle}deg,
+            rgba(255, 0, 255, 0.4) ${angle}deg ${angle + this.segmentAngle}deg,
+            transparent ${angle + this.segmentAngle}deg 360deg
+        )`;
+        
+        this.winnerHighlight.classList.add('show');
+        
+        // Убираем подсветку через 3 секунды
+        setTimeout(() => {
+            this.winnerHighlight.classList.remove('show');
+        }, 3000);
     }
     
     // Modal Management
@@ -180,22 +295,13 @@ class LilBetWheel {
         document.body.style.overflow = '';
     }
     
-    // Effects and Animations
+    // Visual Effects
     addSpinEffects() {
-        // Add glow effect to wheel
-        this.wheel.style.boxShadow = `
-            0 0 0 8px rgba(52, 204, 103, 0.4),
-            0 0 80px rgba(52, 204, 103, 0.6),
-            inset 0 0 30px rgba(0, 0, 0, 0.3)
-        `;
-        
-        // Remove glow after spin
+        // Усиливаем свечение во время вращения (уже в CSS .wheel.spinning)
         setTimeout(() => {
-            this.wheel.style.boxShadow = `
-                0 0 0 8px rgba(52, 204, 103, 0.2),
-                0 0 50px rgba(52, 204, 103, 0.3),
-                inset 0 0 30px rgba(0, 0, 0, 0.3)
-            `;
+            if (!this.isSpinning) {
+                this.wheel.classList.remove('spinning');
+            }
         }, 4000);
     }
     
@@ -210,7 +316,7 @@ class LilBetWheel {
             background: radial-gradient(circle, rgba(52, 204, 103, 0.4) 0%, transparent 70%);
             pointer-events: none;
             z-index: 999;
-            animation: flashWin 0.8s ease-out;
+            animation: flashWin 1s ease-out;
         `;
         
         document.body.appendChild(flash);
@@ -219,12 +325,11 @@ class LilBetWheel {
             if (flash.parentNode) {
                 flash.parentNode.removeChild(flash);
             }
-        }, 800);
+        }, 1000);
         
-        // Add flash animation if not exists
-        if (!document.querySelector('#flash-animation-style')) {
+        if (!document.querySelector('#flash-win-style')) {
             const style = document.createElement('style');
-            style.id = 'flash-animation-style';
+            style.id = 'flash-win-style';
             style.textContent = `
                 @keyframes flashWin {
                     0% { opacity: 0; }
@@ -236,15 +341,15 @@ class LilBetWheel {
         }
     }
     
-    // Confetti System
+    // Confetti System с цветами бренда
     createConfetti() {
-        const confettiCount = 50;
-        const colors = ['#34cc67', '#ff00ff', '#ffffff', '#2fb557'];
+        const confettiCount = 60;
+        const colors = ['#34cc67', '#ff00ff', '#ffffff', '#2fb557', '#082b53'];
         
         for (let i = 0; i < confettiCount; i++) {
             setTimeout(() => {
                 this.createConfettiPiece(colors[Math.floor(Math.random() * colors.length)]);
-            }, i * 50);
+            }, i * 30);
         }
     }
     
@@ -253,14 +358,14 @@ class LilBetWheel {
         confetti.className = 'confetti-piece';
         confetti.style.cssText = `
             position: fixed;
-            width: ${Math.random() * 10 + 5}px;
-            height: ${Math.random() * 10 + 5}px;
+            width: ${Math.random() * 12 + 6}px;
+            height: ${Math.random() * 12 + 6}px;
             background: ${color};
-            top: -10px;
+            top: -20px;
             left: ${Math.random() * 100}vw;
             z-index: 1001;
             border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
-            animation: confettiFall ${3 + Math.random() * 2}s ease-out forwards;
+            animation: confettiFall ${2 + Math.random() * 3}s ease-out forwards;
             transform: rotate(${Math.random() * 360}deg);
         `;
         
@@ -275,44 +380,49 @@ class LilBetWheel {
     
     // Sound Effects
     preloadSounds() {
-        // Create audio context for better browser support
         try {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         } catch (e) {
-            console.log('Web Audio API not supported');
+            console.log('Web Audio API не поддерживается');
         }
     }
     
     playSpinSound() {
-        // Visual feedback for spin (since we can't guarantee audio)
-        document.body.style.animation = 'shake 0.5s ease-in-out';
+        // Звук тик-тик при вращении
+        for (let i = 0; i < 8; i++) {
+            setTimeout(() => {
+                this.playBeep(200, 50); // Короткий тик
+            }, i * 400);
+        }
+        
+        // Визуальная обратная связь
+        document.body.style.animation = 'spinVibration 0.5s ease-out';
         setTimeout(() => {
             document.body.style.animation = '';
         }, 500);
         
-        // Add shake animation if not exists
-        if (!document.querySelector('#shake-animation-style')) {
+        if (!document.querySelector('#spin-vibration-style')) {
             const style = document.createElement('style');
-            style.id = 'shake-animation-style';
+            style.id = 'spin-vibration-style';
             style.textContent = `
-                @keyframes shake {
+                @keyframes spinVibration {
                     0%, 100% { transform: translateX(0); }
-                    25% { transform: translateX(-2px); }
-                    75% { transform: translateX(2px); }
+                    25% { transform: translateX(-1px); }
+                    75% { transform: translateX(1px); }
                 }
             `;
             document.head.appendChild(style);
         }
-        
-        // Try to play beep sound if possible
-        this.playBeep(220, 200); // Low beep for spin
     }
     
     playWinSound() {
-        // Play celebration beeps
-        this.playBeep(523, 200); // High C
-        setTimeout(() => this.playBeep(659, 200), 150); // E
-        setTimeout(() => this.playBeep(784, 300), 300); // G
+        // Звон при выигрыше - мелодичная последовательность
+        const melody = [523, 659, 784, 1047]; // C, E, G, C
+        melody.forEach((freq, index) => {
+            setTimeout(() => {
+                this.playBeep(freq, 300);
+            }, index * 150);
+        });
     }
     
     playBeep(frequency, duration) {
@@ -328,23 +438,23 @@ class LilBetWheel {
             oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
             oscillator.type = 'sine';
             
-            gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration / 1000);
             
             oscillator.start(this.audioContext.currentTime);
             oscillator.stop(this.audioContext.currentTime + duration / 1000);
         } catch (e) {
-            console.log('Audio playback failed:', e);
+            console.log('Ошибка воспроизведения звука:', e);
         }
     }
     
     // Background Animations
     createFloatingShapes() {
         setInterval(() => {
-            if (document.querySelectorAll('.floating-particle').length < 5) {
+            if (document.querySelectorAll('.floating-particle').length < 6) {
                 this.createFloatingParticle();
             }
-        }, 3000);
+        }, 4000);
     }
     
     createFloatingParticle() {
@@ -352,15 +462,15 @@ class LilBetWheel {
         particle.className = 'floating-particle';
         particle.style.cssText = `
             position: fixed;
-            width: ${Math.random() * 6 + 4}px;
-            height: ${Math.random() * 6 + 4}px;
+            width: ${Math.random() * 8 + 4}px;
+            height: ${Math.random() * 8 + 4}px;
             background: #34cc67;
             border-radius: 50%;
-            bottom: -10px;
+            bottom: -15px;
             left: ${Math.random() * 100}vw;
             z-index: 0;
-            opacity: ${Math.random() * 0.5 + 0.3};
-            animation: floatUp ${8 + Math.random() * 4}s linear forwards;
+            opacity: ${Math.random() * 0.4 + 0.2};
+            animation: floatUp ${10 + Math.random() * 6}s linear forwards;
             pointer-events: none;
         `;
         
@@ -370,12 +480,11 @@ class LilBetWheel {
             if (particle.parentNode) {
                 particle.parentNode.removeChild(particle);
             }
-        }, 12000);
+        }, 16000);
         
-        // Add float animation if not exists
-        if (!document.querySelector('#float-animation-style')) {
+        if (!document.querySelector('#float-up-style')) {
             const style = document.createElement('style');
-            style.id = 'float-animation-style';
+            style.id = 'float-up-style';
             style.textContent = `
                 @keyframes floatUp {
                     to {
@@ -389,78 +498,58 @@ class LilBetWheel {
     }
     
     addInitialAnimations() {
-        // Animate wheel on load
+        // Анимация появления колеса
         this.wheel.style.transform = 'rotate(0deg) scale(0.8)';
         this.wheel.style.opacity = '0';
-        this.wheel.style.transition = 'all 1s ease-out';
+        this.wheel.style.transition = 'all 1.2s ease-out';
         
         setTimeout(() => {
             this.wheel.style.transform = 'rotate(0deg) scale(1)';
             this.wheel.style.opacity = '1';
-        }, 100);
+        }, 300);
         
-        // Animate elements on scroll
-        this.addScrollAnimations();
+        // Параллакс эффект для фоновых фигур
+        this.addParallaxEffect();
     }
     
-    addScrollAnimations() {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'slideInUp 0.8s ease-out forwards';
-                }
+    addParallaxEffect() {
+        window.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.floating-shape');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 0.03;
+                const x = (mouseX - 0.5) * speed * 50;
+                const y = (mouseY - 0.5) * speed * 50;
+                
+                shape.style.transform += ` translate(${x}px, ${y}px)`;
             });
-        }, observerOptions);
-        
-        // Observe feature items
-        document.querySelectorAll('.feature-item').forEach(item => {
-            item.style.opacity = '0';
-            item.style.transform = 'translateY(30px)';
-            observer.observe(item);
         });
-        
-        // Add slide in animation
-        if (!document.querySelector('#slide-animation-style')) {
-            const style = document.createElement('style');
-            style.id = 'slide-animation-style';
-            style.textContent = `
-                @keyframes slideInUp {
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-            `;
-            document.head.appendChild(style);
-        }
     }
     
     // Navigation
     redirectToLilBet() {
-        // Add loading animation to button
         const btn = event.target;
         const originalText = btn.textContent;
+        
+        // Анимация кнопки
         btn.textContent = 'ПЕРЕХОД...';
         btn.disabled = true;
         
-        // Add visual feedback
+        // Эффект перехода
         this.createRedirectEffect();
         
-        // Redirect after short delay
+        // Открываем сайт
         setTimeout(() => {
             window.open('https://lil.bet', '_blank');
             
-            // Reset button after redirect
+            // Возвращаем кнопку в исходное состояние
             setTimeout(() => {
                 btn.textContent = originalText;
                 btn.disabled = false;
-            }, 1000);
-        }, 500);
+            }, 1500);
+        }, 800);
     }
     
     createRedirectEffect() {
@@ -475,7 +564,7 @@ class LilBetWheel {
             opacity: 0;
             z-index: 10000;
             pointer-events: none;
-            animation: redirectFlash 1s ease-out;
+            animation: redirectPulse 1.5s ease-out;
         `;
         
         document.body.appendChild(effect);
@@ -484,16 +573,16 @@ class LilBetWheel {
             if (effect.parentNode) {
                 effect.parentNode.removeChild(effect);
             }
-        }, 1000);
+        }, 1500);
         
-        // Add redirect animation
-        if (!document.querySelector('#redirect-animation-style')) {
+        if (!document.querySelector('#redirect-pulse-style')) {
             const style = document.createElement('style');
-            style.id = 'redirect-animation-style';
+            style.id = 'redirect-pulse-style';
             style.textContent = `
-                @keyframes redirectFlash {
+                @keyframes redirectPulse {
                     0% { opacity: 0; }
-                    50% { opacity: 0.3; }
+                    30% { opacity: 0.3; }
+                    60% { opacity: 0.1; }
                     100% { opacity: 0; }
                 }
             `;
@@ -514,55 +603,37 @@ class LilBetWheel {
 }
 
 // Page Enhancement Class
-class PageEnhancer {
+class LilBetPageEnhancer {
     constructor() {
         this.init();
     }
     
     init() {
         this.addInteractiveEffects();
-        this.optimizePerformance();
+        this.addScrollEffects();
         this.addAccessibility();
+        this.optimizePerformance();
     }
     
     addInteractiveEffects() {
-        // Add hover effects to interactive elements
-        document.querySelectorAll('.cta-btn, .wheel-center-btn, .modal-btn').forEach(btn => {
+        // Hover эффекты для всех кнопок
+        document.querySelectorAll('button').forEach(btn => {
             btn.addEventListener('mouseenter', () => {
-                btn.style.transform += ' scale(1.05)';
+                btn.style.transform += ' scale(1.02)';
             });
             
             btn.addEventListener('mouseleave', () => {
-                btn.style.transform = btn.style.transform.replace(' scale(1.05)', '');
+                btn.style.transform = btn.style.transform.replace(' scale(1.02)', '');
             });
-        });
-        
-        // Add parallax effect to background shapes
-        window.addEventListener('mousemove', (e) => {
-            const shapes = document.querySelectorAll('.floating-shape');
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
             
-            shapes.forEach((shape, index) => {
-                const speed = (index + 1) * 0.02;
-                const x = (mouseX - 0.5) * speed * 100;
-                const y = (mouseY - 0.5) * speed * 100;
-                
-                shape.style.transform += ` translate(${x}px, ${y}px)`;
+            // Звук клика кнопки
+            btn.addEventListener('click', () => {
+                this.playClickSound();
             });
         });
     }
     
-    optimizePerformance() {
-        // Lazy load animations
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-        
-        if (reduceMotion.matches) {
-            // Disable animations for users who prefer reduced motion
-            document.body.style.setProperty('--animation-duration', '0s');
-        }
-        
-        // Optimize scroll performance
+    addScrollEffects() {
         let ticking = false;
         
         window.addEventListener('scroll', () => {
@@ -580,11 +651,10 @@ class PageEnhancer {
         const scrollY = window.pageYOffset;
         const header = document.querySelector('.header');
         
-        // Add header background on scroll
         if (scrollY > 100) {
             header.style.background = 'rgba(8, 43, 83, 0.95)';
-            header.style.backdropFilter = 'blur(10px)';
-            header.style.borderBottom = '1px solid rgba(52, 204, 103, 0.2)';
+            header.style.backdropFilter = 'blur(15px)';
+            header.style.borderBottom = '1px solid rgba(52, 204, 103, 0.3)';
         } else {
             header.style.background = 'transparent';
             header.style.backdropFilter = 'none';
@@ -592,40 +662,77 @@ class PageEnhancer {
         }
     }
     
+    playClickSound() {
+        // Простой звук клика
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.type = 'square';
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        } catch (e) {
+            // Тихий fallback
+        }
+    }
+    
     addAccessibility() {
-        // Add focus indicators
+        // ARIA labels и focus indicators
+        const spinBtn = document.getElementById('spinBtn');
+        const playBtn = document.getElementById('playBtn');
+        const claimBtn = document.getElementById('claimBtn');
+        
+        if (spinBtn) spinBtn.setAttribute('aria-label', 'Крутить колесо фортуны');
+        if (playBtn) playBtn.setAttribute('aria-label', 'Перейти к игре на LilBet');
+        if (claimBtn) claimBtn.setAttribute('aria-label', 'Забрать выигрыш');
+        
+        // Focus indicators
         const style = document.createElement('style');
         style.textContent = `
-            *:focus {
-                outline: 2px solid #34cc67;
+            button:focus {
+                outline: 3px solid #34cc67;
                 outline-offset: 2px;
             }
             
             .wheel-center-btn:focus {
-                outline: 3px solid #ff00ff;
+                outline: 4px solid #ff00ff;
             }
         `;
         document.head.appendChild(style);
+    }
+    
+    optimizePerformance() {
+        // Проверка предпочтений пользователя по анимациям
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
         
-        // Add ARIA labels
-        document.getElementById('spinBtn').setAttribute('aria-label', 'Крутить колесо фортуны');
-        document.getElementById('playBtn').setAttribute('aria-label', 'Перейти к игре');
-        document.getElementById('claimBtn').setAttribute('aria-label', 'Забрать выигрыш');
+        if (prefersReducedMotion.matches) {
+            document.documentElement.style.setProperty('--animation-duration', '0.1s');
+        }
     }
 }
 
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    const lilBetWheel = new LilBetWheel();
-    const pageEnhancer = new PageEnhancer();
+    const fortuneWheel = new LilBetFortuneWheel();
+    const pageEnhancer = new LilBetPageEnhancer();
     
-    // Add console message
-    console.log('🎰 LilBet Casino - Современное колесо фортуны загружено! 🎰');
-    console.log('💚 Дизайн: Синий #082b53 + Зеленый #34cc67 + Маджента #ff00ff');
-    console.log('🎯 Демо режим: Всегда выигрыш 1000₽');
+    console.log('🎰 LilBet Casino - Полностью исправленная версия загружена!');
+    console.log('✅ Кнопка "КРУТИТЬ" теперь крутит колесо');
+    console.log('✅ Добавлены звуки, тряска, подсветка победителя');
+    console.log('✅ Таймер с красным цветом при <1 минуты');
+    console.log('✅ Продвинутая логика выигрышей');
     
     // Cleanup on page unload
     window.addEventListener('beforeunload', () => {
-        lilBetWheel.destroy();
+        fortuneWheel.destroy();
     });
 });

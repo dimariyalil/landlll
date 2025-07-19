@@ -8,10 +8,10 @@
     <meta name="theme-color" content="#082b53">
     <title>LilBet - Крути колесо удачи!</title>
     
-    <!-- Fonts -->
+    <!-- Fonts - Tektur ExtraBold -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
@@ -79,30 +79,33 @@
                     <div class="wheel-wrapper">
                         <!-- Wheel Segments -->
                         <div class="wheel" id="wheel">
-                            <div class="wheel-segment segment-1" data-prize="50">50₽</div>
+                            <div class="wheel-segment segment-1" data-prize="500">500₽</div>
                             <div class="wheel-segment segment-2" data-prize="100">100₽</div>
-                            <div class="wheel-segment segment-3" data-prize="500">500₽</div>
-                            <div class="wheel-segment segment-4" data-prize="1000">1000₽</div>
+                            <div class="wheel-segment segment-3" data-prize="1000">1000₽</div>
+                            <div class="wheel-segment segment-4" data-prize="bonus">БОНУС</div>
                             <div class="wheel-segment segment-5" data-prize="2000">2000₽</div>
-                            <div class="wheel-segment segment-6" data-prize="5000">5000₽</div>
-                            <div class="wheel-segment segment-7" data-prize="0">НЕУДАЧА</div>
-                            <div class="wheel-segment segment-8" data-prize="bonus">БОНУС</div>
+                            <div class="wheel-segment segment-6" data-prize="500">500₽</div>
+                            <div class="wheel-segment segment-7" data-prize="1000">1000₽</div>
+                            <div class="wheel-segment segment-8" data-prize="5000">5000₽</div>
                         </div>
                         
-                        <!-- Center Button -->
-                        <button class="wheel-center-btn" id="spinBtn">
-                            <span class="btn-text">КРУТИТЬ</span>
+                        <!-- Center Spin Button -->
+                        <button class="wheel-center-btn" id="spinBtn" type="button">
+                            <span class="btn-text" id="btnText">КРУТИТЬ</span>
                             <div class="btn-icon">🎰</div>
                         </button>
                         
                         <!-- Pointer -->
                         <div class="wheel-pointer"></div>
+                        
+                        <!-- Winner Highlight -->
+                        <div class="winner-highlight" id="winnerHighlight"></div>
                     </div>
                 </div>
 
                 <!-- CTA Section -->
                 <div class="cta-section">
-                    <button class="cta-btn primary" id="playBtn">
+                    <button class="cta-btn primary" id="playBtn" type="button">
                         <span>ИГРАТЬ СЕЙЧАС</span>
                         <div class="btn-glow"></div>
                     </button>
@@ -150,9 +153,9 @@
                 
                 <h2 class="modal-title">ПОЗДРАВЛЯЕМ!</h2>
                 <div class="win-amount" id="winAmount">1000₽</div>
-                <p class="modal-text">Вы выиграли бонус!</p>
+                <p class="modal-text">Вы выиграли!</p>
                 
-                <button class="modal-btn" id="claimBtn">
+                <button class="modal-btn" id="claimBtn" type="button">
                     ЗАБРАТЬ ВЫИГРЫШ
                 </button>
                 
